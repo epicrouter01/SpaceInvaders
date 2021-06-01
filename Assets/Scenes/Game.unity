@@ -464,9 +464,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c92d1ba6345f64ea4025ca740566d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2139997760}
   gameWidth: 19
   gameHeight: 11
+  enemiesRows: 6
+  enemiesCols: 17
+  enemiesSpeed: 2
+  enemiesVerticalSpeed: 4
+  player: {fileID: 2139997760}
   enemyPrefab: {fileID: 7218486230389223755, guid: c74d276dcad9c55469f761a4918dd4a7,
     type: 3}
 --- !u!1 &2139997759 stripped

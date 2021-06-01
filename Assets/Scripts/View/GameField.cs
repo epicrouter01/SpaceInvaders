@@ -8,6 +8,8 @@ public class GameField : MonoBehaviour
     [SerializeField] private float gameHeight = 0;
     [SerializeField] private int enemiesRows = 0;
     [SerializeField] private int enemiesCols = 0;
+    [SerializeField] private float enemiesSpeed = 0;
+    [SerializeField] private float enemiesVerticalSpeed = 0;
     [SerializeField] private MainCharacter player = null;
     [SerializeField] private GameObject enemyPrefab = null;
     private float enemiesMoveDelay = 0.2f;
@@ -58,10 +60,15 @@ public class GameField : MonoBehaviour
         for (int i = 0; i < enemiesCols; i++)
         {
             if (enemies[enemiesRows - currentMovingRow - 1, i] == null) continue;
-            enemies[enemiesRows - currentMovingRow - 1, i].transform.position += enemiesMoveDirection * enemiesMoveDelay * 5f;
+            enemies[enemiesRows - currentMovingRow - 1, i].transform.position += enemiesMoveDirection * enemiesMoveDelay * getEnemiesSpeed();
         }
 
         currentMovingRow = (currentMovingRow + 1) % enemiesRows;
+    }
+
+    private float getEnemiesSpeed()
+    {
+        return enemiesMoveDirection == Vector3.down ? enemiesVerticalSpeed : enemiesSpeed;
     }
 
     private void updateEnemiesMoveDirection()
