@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary> Manages the state of the whole application </summary>
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private string gameScene;
+    [SerializeField] private string gameScene = null;
 
     public void Play()
     {
