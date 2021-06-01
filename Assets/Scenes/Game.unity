@@ -464,20 +464,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78c92d1ba6345f64ea4025ca740566d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2139997761}
+  player: {fileID: 2139997760}
   gameWidth: 19
---- !u!114 &2139997761 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6554620371838008080, guid: dc31cab34e45d9249aeb634052e3b0f0,
+  gameHeight: 11
+--- !u!1 &2139997759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6554620371838008082, guid: dc31cab34e45d9249aeb634052e3b0f0,
     type: 3}
   m_PrefabInstance: {fileID: 6554620373576175722}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &2139997760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139997759}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a21f4cc724da12249bc9d772386b3a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 12
+  bulletSpeed: 30
+  playerBulletPrefab: {fileID: 5782363346208792750, guid: ec791f9dec0b64646849478e158fe240,
+    type: 3}
 --- !u!4 &2139997763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6554620371838008086, guid: dc31cab34e45d9249aeb634052e3b0f0,
@@ -581,5 +592,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6554620371838008080, guid: dc31cab34e45d9249aeb634052e3b0f0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: dc31cab34e45d9249aeb634052e3b0f0, type: 3}
