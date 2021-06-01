@@ -6,13 +6,30 @@ public class GameField : MonoBehaviour
 {
     [SerializeField] private float gameWidth = 0;
     [SerializeField] private float gameHeight = 0;
+    [SerializeField] private int enemiesRows = 0;
+    [SerializeField] private int enemiesCols = 0;
     [SerializeField] private MainCharacter player = null;
     [SerializeField] private GameObject enemyPrefab = null;
+    private float enemiesMoveDelay = 0.2f;
 
     private Bullet playerBullet;
+    private GameObject[,] enemies;
+    private Vector3 enemiesMoveDirection;
+    private float enemiesCurrentMoveDelay;
+    private int currentMovingRow;
+
     // Start is called before the first frame update
     void Start()
     {
+        initialize();
+    }
+
+    private void initialize()
+    {
+        enemies = new GameObject[enemiesRows, enemiesCols];
+        enemiesCurrentMoveDelay = enemiesMoveDelay;
+        currentMovingRow = 0;
+        enemiesMoveDirection = Vector3.right;
         spawnEnemies();
     }
 
@@ -22,18 +39,97 @@ public class GameField : MonoBehaviour
         handleMoveInput();
         handleShootInput();
         movePlayerBullet();
+        updateMoveEnemiesTime();
+    }
+
+    private void updateMoveEnemiesTime()
+    {
+        enemiesCurrentMoveDelay -= Time.deltaTime;
+        if (enemiesCurrentMoveDelay <= 0)
+        {
+            enemiesCurrentMoveDelay = enemiesMoveDelay;
+            moveEnemiesRow();
+            updateEnemiesMoveDirection();
+        }
+    }
+
+    private void moveEnemiesRow()
+    {
+        for (int i = 0; i < enemiesCols; i++)
+        {
+            if (enemies[enemiesRows - currentMovingRow - 1, i] == null) continue;
+            enemies[enemiesRows - currentMovingRow - 1, i].transform.position += enemiesMoveDirection * enemiesMoveDelay * 5f;
+        }
+
+        currentMovingRow = (currentMovingRow + 1) % enemiesRows;
+    }
+
+    private void updateEnemiesMoveDirection()
+    {
+        if (currentMovingRow == 0)
+        {
+            enemiesMoveDirection = calculateEnemiesMoveDirection();
+        }
+    }
+
+    private Vector3 calculateEnemiesMoveDirection()
+    {
+        Vector3 boundaryVector = findBoundaryVectorByEnemies();
+        if (enemiesMoveDirection == Vector3.down)
+        {
+            return boundaryVector * -1;
+        }
+
+        if (boundaryVector == Vector3.left || boundaryVector == Vector3.right)
+        {
+            return Vector3.down;
+        }
+
+        return enemiesMoveDirection;
+    }
+
+    private Vector3 getBoundaryVector(GameObject enemy)
+    {
+        if (enemy.transform.position.x <= -gameWidth)
+            return Vector3.left;
+        if (enemy.transform.position.x >= gameWidth)
+            return Vector3.right;
+
+        return Vector3.zero;
+    }
+
+    private Vector3 findBoundaryVectorByEnemies()
+    {
+        Vector3 result = Vector3.zero;
+        for (int i = 0; i < enemiesRows; i++)
+        {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                if (enemies[i, j] == null) continue;
+
+                result = getBoundaryVector(enemies[i, j]);
+                if (result != Vector3.zero) {
+                    return result;
+                }
+            }
+        }
+
+        return result;
     }
 
     private void spawnEnemies() 
     {
         GameObject enemy;
         Vector3 position;
-
-        for (int i = 0; i < 102; i++)
-        {
-            enemy = Instantiate(enemyPrefab);
-            position = new Vector3(-gameWidth + i % 17 * 2.27f, gameHeight - 1 - Mathf.Floor(i / 17) * 2.3f, 0);
-            enemy.transform.position = position;
+        
+        for (int i = 0; i < enemiesRows; i++) {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                enemy = Instantiate(enemyPrefab);
+                position = new Vector3(-gameWidth + j * 2.27f, gameHeight - 1 - i * 2.3f, 0);
+                enemy.transform.position = position;
+                enemies[i, j] = enemy;
+            }
         }
     }
 
