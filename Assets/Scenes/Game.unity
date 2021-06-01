@@ -263,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &721103282
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -467,6 +467,8 @@ MonoBehaviour:
   player: {fileID: 2139997760}
   gameWidth: 19
   gameHeight: 11
+  enemyPrefab: {fileID: 7218486230389223755, guid: c74d276dcad9c55469f761a4918dd4a7,
+    type: 3}
 --- !u!1 &2139997759 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6554620371838008082, guid: dc31cab34e45d9249aeb634052e3b0f0,
@@ -525,7 +527,7 @@ PrefabInstance:
     - target: {fileID: 6554620371838008086, guid: dc31cab34e45d9249aeb634052e3b0f0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6554620371838008086, guid: dc31cab34e45d9249aeb634052e3b0f0,
         type: 3}

@@ -7,12 +7,13 @@ public class GameField : MonoBehaviour
     [SerializeField] private MainCharacter player = null;
     [SerializeField] private float gameWidth = 0;
     [SerializeField] private float gameHeight = 0;
+    [SerializeField] private GameObject enemyPrefab = null;
 
     private GameObject playerBullet;
     // Start is called before the first frame update
     void Start()
     {
-        
+        spawnEnemies();
     }
 
     // Update is called once per frame
@@ -21,6 +22,19 @@ public class GameField : MonoBehaviour
         handleMoveInput();
         handleShootInput();
         movePlayerBullet();
+    }
+
+    private void spawnEnemies() 
+    {
+        GameObject enemy;
+        Vector3 position;
+
+        for (int i = 0; i < 102; i++)
+        {
+            enemy = Instantiate(enemyPrefab);
+            position = new Vector3(-gameWidth + i % 17 * 2.27f, gameHeight - 1 - Mathf.Floor(i / 17) * 2.3f, 0);
+            enemy.transform.position = position;
+        }
     }
 
     private void handleMoveInput()
@@ -68,6 +82,5 @@ public class GameField : MonoBehaviour
         playerBullet = Instantiate(player.PlayerBulletPrefab);
         playerBullet.name = "PlayerBullet";
         playerBullet.transform.position = player.transform.position;
-        //playerBullet.AddComponent<SpriteRenderer>().sprite = sprite;
     }
 }
