@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameField : MonoBehaviour
 {
-    [SerializeField] private MainCharacter player = null;
     [SerializeField] private float gameWidth = 0;
     [SerializeField] private float gameHeight = 0;
+    [SerializeField] private MainCharacter player = null;
     [SerializeField] private GameObject enemyPrefab = null;
 
-    private GameObject playerBullet;
+    private Bullet playerBullet;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,9 +62,14 @@ public class GameField : MonoBehaviour
         playerBullet.transform.position += Vector3.up * player.BulletSpeed * Time.deltaTime;
         if (playerBullet.transform.position.y >= gameHeight)
         {
-            Destroy(playerBullet);
-            playerBullet = null;
+            destroyBullet();
         }
+    }
+
+    private void destroyBullet()
+    {
+        Destroy(playerBullet.gameObject);
+        playerBullet = null;
     }
 
     private void handleShootInput()
@@ -79,8 +84,18 @@ public class GameField : MonoBehaviour
 
     private void makeShot()
     {
-        playerBullet = Instantiate(player.PlayerBulletPrefab);
+        playerBullet = Instantiate(player.PlayerBulletPrefab).GetComponent<Bullet>();
         playerBullet.name = "PlayerBullet";
         playerBullet.transform.position = player.transform.position;
+        playerBullet.registerCollisionCallback(onPlayerBulletCollision);
+    }
+
+    private void onPlayerBulletCollision(GameObject gameObject)
+    {
+        if (gameObject.tag == "Enemy")
+        {
+            destroyBullet();
+            Destroy(gameObject);
+        }
     }
 }
