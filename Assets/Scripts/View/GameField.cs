@@ -13,6 +13,7 @@ public class GameField : MonoBehaviour
     [SerializeField] private MainCharacter player = null;
     [SerializeField] private GameObject enemyPrefab = null;
     private float enemiesMoveDelay = 0.2f;
+    private float loseThreshold = 2;
 
     private Bullet playerBullet;
     private GameObject[,] enemies;
@@ -32,6 +33,7 @@ public class GameField : MonoBehaviour
         enemiesCurrentMoveDelay = enemiesMoveDelay;
         currentMovingRow = 0;
         enemiesMoveDirection = Vector3.right;
+        player.transform.position = new Vector3(0, player.transform.position.y, 0);
         spawnEnemies();
     }
 
@@ -51,7 +53,59 @@ public class GameField : MonoBehaviour
         {
             enemiesCurrentMoveDelay = enemiesMoveDelay;
             moveEnemiesRow();
+            checkLoseCondition();
             updateEnemiesMoveDirection();
+        }
+    }
+
+    private void checkLoseCondition()
+    {
+        if ((enemiesMoveDirection == Vector3.down) && isEnemiesBelowThreshold())
+        {
+            gameOver();
+        }
+    }
+
+    private bool isEnemiesBelowThreshold()
+    {
+        for (int i = 0; i < enemiesRows; i++)
+        {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                if (enemies[i, j] == null) continue;
+
+                if (enemies[i, j].transform.position.y <= -gameHeight + loseThreshold)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void gameOver()
+    {
+        cleanUp();
+        initialize();
+    }
+
+    private void cleanUp()
+    {
+        removeEnemies();
+        destroyBullet();
+    }
+
+    private void removeEnemies()
+    {
+        for (int i = 0; i < enemiesRows; i++)
+        {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                if (enemies[i, j] == null) continue;
+
+                Destroy(enemies[i, j]);
+            }
         }
     }
 
@@ -171,6 +225,7 @@ public class GameField : MonoBehaviour
 
     private void destroyBullet()
     {
+        if (playerBullet == null) return;
         Destroy(playerBullet.gameObject);
         playerBullet = null;
     }
