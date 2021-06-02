@@ -107,7 +107,7 @@ public class EnemiesShootingBehavior : MonoBehaviour
     private GameObject findEligibleShooter()
     {
         List<GameObject> list = getLowestEnemies();
-        return list[UnityEngine.Random.Range(0, list.Count)];
+        return list.Count == 0 ? null : list[UnityEngine.Random.Range(0, list.Count)];
     }
 
     private List<GameObject> getLowestEnemies()

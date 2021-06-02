@@ -1534,8 +1534,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesInitialSpeed: 2
-  enemiesMaxSpeed: 20
-  enemiesVerticalMove: 1
+  enemiesMaxSpeed: 15
+  enemiesVerticalMove: 0.6
 --- !u!114 &1176737291
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,6 +43,12 @@ public class EnemiesSpawnBehavior : MonoBehaviour
         return (EnemyBehavior.Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length));
     }
 
+    public void removeEnemy(int row, int col)
+    {
+        Destroy(enemies[row, col]);
+        enemies[row, col] = null;
+    }
+
     public void removeEnemies()
     {
         for (int i = 0; i < enemiesRows; i++)
@@ -59,7 +65,7 @@ public class EnemiesSpawnBehavior : MonoBehaviour
     public bool isEmpty()
     {
         for (int i = 0; i < enemiesRows; i++)
-            for (int j = 0; j < EnemiesCols; j++)
+            for (int j = 0; j < enemiesCols; j++)
                 if (enemies[i, j] != null)
                     return false;
 

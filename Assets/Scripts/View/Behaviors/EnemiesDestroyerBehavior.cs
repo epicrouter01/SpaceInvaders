@@ -11,7 +11,7 @@ public class EnemiesDestroyerBehavior : MonoBehaviour
         List <BoardTile> list = enemiesDestroyStrategy.getDestroyedEnemies(createTiles(), enemy.Row, enemy.Col);
         foreach (BoardTile tile in list)
         {
-            Destroy(getSpawner().Enemies[tile.X, tile.Y]);
+            getSpawner().removeEnemy(tile.X, tile.Y);
         }
 
         return list.Count;
