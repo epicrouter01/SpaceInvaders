@@ -6,6 +6,7 @@ public class GameField : MonoBehaviour
     [SerializeField] private GameObject player = null;
     [SerializeField] private GameObject enemiesContainer = null;
     [SerializeField] private GameObject playerLifesContainer = null;
+    [SerializeField] private GameObject protectorsContainer = null;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,12 @@ public class GameField : MonoBehaviour
             if (getPlayerLifesBehavior().LifesCount <= 0)
                 gameOver();
         }
+        if (target.tag == "Protector")
+        {
+            getEnemiesShootingBehavior().destroyBullet(bullet);
+            target.GetComponent<ProtectorBehavior>().Lifes -= 1;
+            getProtectorsManager().updateProtectors();
+        }
     }
 
     private void initialize()
@@ -38,6 +45,7 @@ public class GameField : MonoBehaviour
         getEnemiesSpawnBehavior().spawnEnemies();
         getEnemiesMovingBehavior().resetAll();
         getPlayerLifesBehavior().cleanUp();
+        getProtectorsManager().setUp();
     }
 
     // Update is called once per frame
@@ -63,6 +71,10 @@ public class GameField : MonoBehaviour
         {
             getPlayerShootingBehavior().destroyBullet();
             destroyEnemy(target);
+        }
+        if (target.tag == "Protector")
+        {
+            getPlayerShootingBehavior().destroyBullet();
         }
     }
 
@@ -96,5 +108,9 @@ public class GameField : MonoBehaviour
     private LifesBehavior getPlayerLifesBehavior()
     {
         return playerLifesContainer.GetComponent<LifesBehavior>();
+    }
+    private ProtectorManagerBehavior getProtectorsManager()
+    {
+        return protectorsContainer.GetComponent<ProtectorManagerBehavior>();
     }
 }
