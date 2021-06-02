@@ -15,7 +15,13 @@ public class GameField : MonoBehaviour
     void Start()
     {
         initializeBehaviors();
-        initialize();
+        restartGame();
+    }
+
+    public void restartGame()
+    {
+        resumeGame();
+        startGame();
     }
 
     private void initializeBehaviors()
@@ -42,7 +48,7 @@ public class GameField : MonoBehaviour
         }
     }
 
-    private void initialize()
+    private void startGame()
     {
         player.transform.position = new Vector3(0, player.transform.position.y, 0);
         getEnemiesSpawnBehavior().spawnEnemies();
@@ -59,9 +65,19 @@ public class GameField : MonoBehaviour
 
     private void gameOver()
     {
-        makeGameoverCallback();
         cleanUp();
-        initialize();
+        pauseGame();
+        makeGameoverCallback();
+    }
+
+    private void resumeGame()
+    {
+        Time.timeScale = 1;
+    }
+
+    private void pauseGame()
+    {
+        Time.timeScale = 0;
     }
 
     private void makeGameoverCallback()

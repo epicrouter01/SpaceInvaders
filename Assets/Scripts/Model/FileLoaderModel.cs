@@ -24,7 +24,7 @@ public class FileLoaderModel: Model
         }
         catch(FileNotFoundException e)
         {
-            
+            Debug.Log(e);
         }
         return data == null ? null : JsonUtility.FromJson<PersistentData>(data);
     }

@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
     [SerializeField] private GameField gameField = null;
+    [SerializeField] private LosePopupBehavior losePopup = null;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +17,25 @@ public class GameSceneManager : MonoBehaviour
     private void onGameOver(int score)
     {
         updateHighscore(score);
+        showLosePopup(score);
+    }
+
+    private void showLosePopup(int score)
+    {
+        losePopup.gameObject.SetActive(true);
+        losePopup.Score = score;
+        losePopup.Highscore = ModelsManager.getInstance().ScoreModel.Highscore;
+    }
+
+    public void exitGame()
+    {
+        SceneManager.LoadScene("Home", LoadSceneMode.Single);
+    }
+
+    public void restartGame()
+    {
+        losePopup.gameObject.SetActive(false);
+        gameField.restartGame();
     }
 
     private void updateHighscore(int score)
