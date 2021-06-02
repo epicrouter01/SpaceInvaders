@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameField : MonoBehaviour
 {
@@ -8,18 +9,22 @@ public class GameField : MonoBehaviour
     [SerializeField] private float gameHeight = 0;
     [SerializeField] private int enemiesRows = 0;
     [SerializeField] private int enemiesCols = 0;
-    [SerializeField] private float enemiesSpeed = 0;
-    [SerializeField] private float enemiesVerticalSpeed = 0;
+    [SerializeField] private float enemiesInitialSpeed = 0;
+    [SerializeField] private float enemiesMaxSpeed = 0;
+    [SerializeField] private float enemiesVerticalMove = 0;
     [SerializeField] private MainCharacter player = null;
     [SerializeField] private GameObject enemyPrefab = null;
-    private float enemiesMoveDelay = 0.2f;
-    private float loseThreshold = 2;
+    private readonly float enemiesInitialMoveDelay = 0.2f;
+    private readonly float loseThreshold = 2;
 
     private Bullet playerBullet;
     private GameObject[,] enemies;
     private Vector3 enemiesMoveDirection;
-    private float enemiesCurrentMoveDelay;
+    private float enemiesSpeed;
+    private float enemiesMoveDelay;
     private int currentMovingRow;
+
+    private float timeron = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -29,9 +34,11 @@ public class GameField : MonoBehaviour
 
     private void initialize()
     {
+        timeron = 0;
         enemies = new GameObject[enemiesRows, enemiesCols];
-        enemiesCurrentMoveDelay = enemiesMoveDelay;
-        currentMovingRow = 0;
+        enemiesMoveDelay = enemiesInitialMoveDelay;
+        enemiesSpeed = enemiesInitialSpeed;
+        currentMovingRow = enemiesRows - 1;
         enemiesMoveDirection = Vector3.right;
         player.transform.position = new Vector3(0, player.transform.position.y, 0);
         spawnEnemies();
@@ -40,22 +47,45 @@ public class GameField : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        handleMoveInput();
+        movePlayer();
         handleShootInput();
         movePlayerBullet();
-        updateMoveEnemiesTime();
+        moveEnemies();
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            int row, col;
+            row = (int)Mathf.Floor(timeron / enemiesCols);
+            col = (int)Mathf.Floor(timeron % enemiesCols);
+            if (enemies[row, col] == null) 
+                return;
+            Destroy(enemies[row, col]);
+            timeron = Mathf.Min(timeron + 1, enemiesCols * enemiesRows - 1);
+            calculateEnemiesSpeed();
+        }
     }
 
-    private void updateMoveEnemiesTime()
+    private void moveEnemies()
     {
-        enemiesCurrentMoveDelay -= Time.deltaTime;
-        if (enemiesCurrentMoveDelay <= 0)
+        enemiesMoveDelay -= Time.deltaTime;
+        if (enemiesMoveDelay <= 0)
         {
-            enemiesCurrentMoveDelay = enemiesMoveDelay;
+            calculateEnemiesMovementDelay();
+            updateCurrentMovingRow();
             moveEnemiesRow();
-            checkLoseCondition();
             updateEnemiesMoveDirection();
+            checkLoseCondition();
         }
+    }
+
+    private void updateCurrentMovingRow()
+    {
+        currentMovingRow = findClosestNonEmptyRow(currentMovingRow);
+    }
+
+    private void calculateEnemiesMovementDelay()
+    {
+        enemiesMoveDelay = enemiesInitialMoveDelay * (enemiesInitialSpeed / enemiesSpeed);
     }
 
     private void checkLoseCondition()
@@ -113,24 +143,59 @@ public class GameField : MonoBehaviour
     {
         for (int i = 0; i < enemiesCols; i++)
         {
-            if (enemies[enemiesRows - currentMovingRow - 1, i] == null) continue;
-            enemies[enemiesRows - currentMovingRow - 1, i].transform.position += enemiesMoveDirection * enemiesMoveDelay * getEnemiesSpeed();
+            if (enemies[currentMovingRow, i] == null) continue;
+            enemies[currentMovingRow, i].transform.position += getEnemiesMoveVector();
         }
 
-        currentMovingRow = (currentMovingRow + 1) % enemiesRows;
+        currentMovingRow -= 1;
+        if (currentMovingRow < 0)
+            currentMovingRow = enemiesRows - 1;
     }
 
-    private float getEnemiesSpeed()
+    private Vector3 getEnemiesMoveVector()
     {
-        return enemiesMoveDirection == Vector3.down ? enemiesVerticalSpeed : enemiesSpeed;
+        Vector3 result;
+
+        if (enemiesMoveDirection == Vector3.down)
+            result = new Vector3(0, -enemiesVerticalMove, 0);
+        else
+            result = enemiesMoveDirection * enemiesMoveDelay * enemiesSpeed;
+
+        return result;
     }
 
     private void updateEnemiesMoveDirection()
     {
-        if (currentMovingRow == 0)
+        if (currentMovingRow == getLowestRow())
         {
             enemiesMoveDirection = calculateEnemiesMoveDirection();
         }
+    }
+
+    private int findClosestNonEmptyRow(int row)
+    {
+        for (int i = row; i >= 0; i--)
+            if (isRawHasEnemies(i))
+                return i;
+
+        return 0;
+    }
+
+    private int getLowestRow()
+    {
+        for (int i = enemiesRows - 1; i >= 0; i--)
+            if (isRawHasEnemies(i))
+                return i;
+        return 0;
+    }
+
+    private bool isRawHasEnemies(int row)
+    {
+        for (int j = 0; j < enemiesCols; j++)
+            if (enemies[row, j] != null)
+                return true;
+
+        return false;
     }
 
     private Vector3 calculateEnemiesMoveDirection()
@@ -194,7 +259,7 @@ public class GameField : MonoBehaviour
         }
     }
 
-    private void handleMoveInput()
+    private void movePlayer()
     {
         Vector3 newPosition = Vector3.right * GetMovingInput() * player.Speed * Time.deltaTime;
         newPosition += player.transform.position;
@@ -254,6 +319,26 @@ public class GameField : MonoBehaviour
         {
             destroyBullet();
             Destroy(gameObject);
+            calculateEnemiesSpeed();
         }
+    }
+
+    private void calculateEnemiesSpeed()
+    {
+        float ratio = (float)getEnemiesCount() / (float)(enemiesRows * enemiesCols);
+        enemiesSpeed = enemiesMaxSpeed - (enemiesMaxSpeed - enemiesInitialSpeed) * ratio;
+    }
+
+    private int getEnemiesCount()
+    {
+        int result = 0;
+        for (int i = 0; i < enemiesRows; i++)
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                if (enemies[i, j] != null)
+                    result++;
+            }
+
+        return result;
     }
 }

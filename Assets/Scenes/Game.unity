@@ -468,8 +468,9 @@ MonoBehaviour:
   gameHeight: 11
   enemiesRows: 6
   enemiesCols: 17
-  enemiesSpeed: 2
-  enemiesVerticalSpeed: 4
+  enemiesInitialSpeed: 2
+  enemiesMaxSpeed: 25
+  enemiesVerticalMove: 1
   player: {fileID: 2139997760}
   enemyPrefab: {fileID: 7218486230389223755, guid: c74d276dcad9c55469f761a4918dd4a7,
     type: 3}
