@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class EnemiesMovingBehavior : MonoBehaviour
@@ -9,6 +8,9 @@ public class EnemiesMovingBehavior : MonoBehaviour
     [SerializeField] private float enemiesVerticalMove = 0;
 
     private readonly float enemiesInitialMoveDelay = 0.2f;
+    private readonly float loseThreshold = 2;
+
+    private Action onGameOver;
     private Vector3 enemiesMoveDirection;
     private float enemiesSpeed;
     private float enemiesMoveDelay;
@@ -28,6 +30,11 @@ public class EnemiesMovingBehavior : MonoBehaviour
         enemiesMoveDirection = Vector3.right;
     }
 
+    public void resetAll()
+    {
+        initialize();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -43,7 +50,43 @@ public class EnemiesMovingBehavior : MonoBehaviour
             moveEnemiesRow();
             updateCurrentMovingRow();
             updateEnemiesMoveDirection();
+            checkLoseCondition();
         }
+    }
+
+    public void registerGameOverCallback(Action callback)
+    {
+        onGameOver = callback;
+    }
+
+    private void checkLoseCondition()
+    {
+        if ((enemiesMoveDirection == Vector3.down) && isEnemiesBelowThreshold())
+        {
+            gameOver();
+        }
+    }
+
+    private void gameOver()
+    {
+        if (onGameOver != null)
+            onGameOver();
+    }
+
+    private bool isEnemiesBelowThreshold()
+    {
+        for (int i = 0; i < getSpawner().EnemiesRows; i++)
+            for (int j = 0; j < getSpawner().EnemiesCols; j++)
+            {
+                if (getEnemies()[i, j] == null) continue;
+
+                if (getEnemies()[i, j].transform.position.y <= -getGameWorld().GameHeight + loseThreshold)
+                {
+                    return true;
+                }
+            }
+
+        return false;
     }
 
     private void calculateEnemiesMovementDelay()
