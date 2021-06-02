@@ -17,6 +17,15 @@ public class GameField : MonoBehaviour
     {
         getPlayerShootingBehavior().registerCollisionCallback(onPlayerBulletCollision);
         getEnemiesMovingBehavior().registerGameOverCallback(onGameOver);
+        getEnemiesShootingBehavior().registerCollisionCallback(onEnemyBulletCollision);
+    }
+
+    private void onEnemyBulletCollision(GameObject target, GameObject bullet)
+    {
+        if (target.tag == "Player")
+        {
+            getEnemiesShootingBehavior().destroyBullet(bullet);
+        }
     }
 
     private void initialize()
@@ -74,5 +83,9 @@ public class GameField : MonoBehaviour
     private EnemiesMovingBehavior getEnemiesMovingBehavior()
     {
         return enemiesContainer.GetComponent<EnemiesMovingBehavior>();
+    }
+    private EnemiesShootingBehavior getEnemiesShootingBehavior()
+    {
+        return enemiesContainer.GetComponent<EnemiesShootingBehavior>();
     }
 }

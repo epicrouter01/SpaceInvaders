@@ -56,7 +56,7 @@ public class InputShootingBehavior : MonoBehaviour
         bullet = null;
     }
 
-    private void onPlayerBulletCollision(GameObject gameObject)
+    private void onPlayerBulletCollision(GameObject target, GameObject bullet)
     {
         if (onCollisionCallback != null)
             onCollisionCallback(gameObject);
