@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class LosePopupBehavior : MonoBehaviour
 {
+    [SerializeField] private GameObject highscoreField = null;
+    [SerializeField] private GameObject scoreField = null;
+    [SerializeField] private GameObject playTextField = null;
+    [SerializeField] private GameObject titleField = null;
+
     private int score;
     private int highscore;
 
@@ -29,7 +34,21 @@ public class LosePopupBehavior : MonoBehaviour
 
     private void updateUI()
     {
-        transform.Find("Highscore").GetComponent<Text>().text = "Highscore: " + highscore;
-        transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
+        highscoreField.GetComponent<Text>().text = "Highscore: " + highscore;
+        scoreField.GetComponent<Text>().text = "Score: " + score;
+    }
+
+    public void setPauseState()
+    {
+        playTextField.GetComponent<Text>().text = "Resume";
+        titleField.GetComponent<Text>().text = "Pause";
+        scoreField.gameObject.SetActive(false);
+    }
+
+    public void setGameOverStates()
+    {
+        playTextField.GetComponent<Text>().text = "Restart";
+        titleField.GetComponent<Text>().text = "Game Over";
+        scoreField.gameObject.SetActive(true);
     }
 }

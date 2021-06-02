@@ -70,12 +70,12 @@ public class GameField : MonoBehaviour
         makeGameoverCallback();
     }
 
-    private void resumeGame()
+    public void resumeGame()
     {
         Time.timeScale = 1;
     }
 
-    private void pauseGame()
+    public void pauseGame()
     {
         Time.timeScale = 0;
     }
