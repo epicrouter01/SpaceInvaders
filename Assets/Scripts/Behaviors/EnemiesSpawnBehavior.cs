@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemiesSpawnBehavior : MonoBehaviour
 {
@@ -25,11 +26,19 @@ public class EnemiesSpawnBehavior : MonoBehaviour
             for (int j = 0; j < enemiesCols; j++)
             {
                 enemy = Instantiate(enemyPrefab);
+                enemy.GetComponent<EnemyBehavior>().Color = generateEnemyColor();
                 position = new Vector3(-getGameWorld().GameWidth + j * 2.27f, getGameWorld().GameHeight - 1 - i * 2.3f, 0);
                 enemy.transform.position = position;
                 Enemies[i, j] = enemy;
             }
         }
+    }
+
+    public EnemyBehavior.Colors generateEnemyColor()
+    {
+        Array colors = Enum.GetValues(typeof(EnemyBehavior.Colors));
+        Debug.Log(colors);
+        return (EnemyBehavior.Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length));
     }
 
     public void removeEnemies()
