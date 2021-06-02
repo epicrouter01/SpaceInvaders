@@ -13,10 +13,14 @@ public class GameField : MonoBehaviour
     [SerializeField] private float enemiesMaxSpeed = 0;
     [SerializeField] private float enemiesVerticalMove = 0;
     [SerializeField] private MainCharacter player = null;
+    [SerializeField] private GameObject playerBulletPrefab = null;
     [SerializeField] private GameObject enemyPrefab = null;
     private readonly float enemiesInitialMoveDelay = 0.2f;
     private readonly float loseThreshold = 2;
+    private readonly float playerSpeed = 12;
+    private readonly float bulletSpeed = 30;
 
+    private HorizontalMovementBehavior playerMovementBehavior;
     private Bullet playerBullet;
     private GameObject[,] enemies;
     private Vector3 enemiesMoveDirection;
@@ -29,7 +33,13 @@ public class GameField : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        setBehaviors();
         initialize();
+    }
+
+    private void setBehaviors()
+    {
+        playerMovementBehavior = new HorizontalMovementBehavior(player.gameObject, gameWidth, playerSpeed);
     }
 
     private void initialize()
@@ -263,27 +273,14 @@ public class GameField : MonoBehaviour
 
     private void movePlayer()
     {
-        Vector3 newPosition = Vector3.right * GetMovingInput() * player.Speed * Time.deltaTime;
-        newPosition += player.transform.position;
-        newPosition.x = Mathf.Clamp(newPosition.x, -gameWidth, gameWidth);
-        player.transform.position = newPosition;
-    }
-
-    private float GetMovingInput()
-    {
-        if (Input.GetKey(KeyCode.LeftArrow))
-            return -1;
-        if (Input.GetKey(KeyCode.RightArrow))
-            return 1;
-
-        return 0;
+        playerMovementBehavior.update(Time.deltaTime);
     }
 
     private void movePlayerBullet()
     {
         if (playerBullet == null) return;
 
-        playerBullet.transform.position += Vector3.up * player.BulletSpeed * Time.deltaTime;
+        playerBullet.transform.position += Vector3.up * bulletSpeed * Time.deltaTime;
         if (playerBullet.transform.position.y >= gameHeight)
         {
             destroyBullet();
@@ -309,7 +306,7 @@ public class GameField : MonoBehaviour
 
     private void makeShot()
     {
-        playerBullet = Instantiate(player.PlayerBulletPrefab).GetComponent<Bullet>();
+        playerBullet = Instantiate(playerBulletPrefab).GetComponent<Bullet>();
         playerBullet.name = "PlayerBullet";
         playerBullet.transform.position = player.transform.position;
         playerBullet.registerCollisionCallback(onPlayerBulletCollision);

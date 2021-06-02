@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e137bd3ce4201df4d9ffeab9dfc520d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Score>k__BackingField: 0
 --- !u!4 &279774607
 Transform:
   m_ObjectHideFlags: 0
@@ -472,6 +473,8 @@ MonoBehaviour:
   enemiesMaxSpeed: 25
   enemiesVerticalMove: 1
   player: {fileID: 2139997760}
+  playerBulletPrefab: {fileID: 5782363346208792750, guid: ec791f9dec0b64646849478e158fe240,
+    type: 3}
   enemyPrefab: {fileID: 7218486230389223755, guid: c74d276dcad9c55469f761a4918dd4a7,
     type: 3}
 --- !u!1 &2139997759 stripped
@@ -492,10 +495,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21f4cc724da12249bc9d772386b3a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
-  bulletSpeed: 30
-  playerBulletPrefab: {fileID: 5782363346208792750, guid: ec791f9dec0b64646849478e158fe240,
-    type: 3}
 --- !u!4 &2139997763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6554620371838008086, guid: dc31cab34e45d9249aeb634052e3b0f0,
