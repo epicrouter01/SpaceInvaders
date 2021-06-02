@@ -57,11 +57,9 @@ public class GameField : MonoBehaviour
             int row, col;
             row = (int)Mathf.Floor(timeron / enemiesCols);
             col = (int)Mathf.Floor(timeron % enemiesCols);
-            if (enemies[row, col] == null) 
-                return;
-            Destroy(enemies[row, col]);
             timeron = Mathf.Min(timeron + 1, enemiesCols * enemiesRows - 1);
-            calculateEnemiesSpeed();
+            if (enemies[row, col] != null)
+                destroyEnemy(enemies[row, col]);
         }
     }
 
@@ -71,8 +69,8 @@ public class GameField : MonoBehaviour
         if (enemiesMoveDelay <= 0)
         {
             calculateEnemiesMovementDelay();
-            updateCurrentMovingRow();
             moveEnemiesRow();
+            updateCurrentMovingRow();
             updateEnemiesMoveDirection();
             checkLoseCondition();
         }
@@ -175,6 +173,10 @@ public class GameField : MonoBehaviour
     private int findClosestNonEmptyRow(int row)
     {
         for (int i = row; i >= 0; i--)
+            if (isRawHasEnemies(i))
+                return i;
+
+        for (int i = enemiesRows - 1; i > row; i--)
             if (isRawHasEnemies(i))
                 return i;
 
@@ -318,9 +320,15 @@ public class GameField : MonoBehaviour
         if (gameObject.tag == "Enemy")
         {
             destroyBullet();
-            Destroy(gameObject);
-            calculateEnemiesSpeed();
+            destroyEnemy(gameObject);
         }
+    }
+
+    private void destroyEnemy(GameObject enemy)
+    {
+        Destroy(enemy);
+        calculateEnemiesSpeed();
+        updateCurrentMovingRow();
     }
 
     private void calculateEnemiesSpeed()
