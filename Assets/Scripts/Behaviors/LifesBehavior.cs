@@ -27,7 +27,7 @@ public class LifesBehavior : MonoBehaviour
     private void initialize()
     {
         createLifes();
-        cleanUp();
+        onGameStarted();
     }
 
     private void createLifes()
@@ -49,7 +49,7 @@ public class LifesBehavior : MonoBehaviour
         }
     }
 
-    public void cleanUp()
+    public void onGameStarted()
     {
         LifesCount = maxLifes;
     }

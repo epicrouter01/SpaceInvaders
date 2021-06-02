@@ -30,7 +30,7 @@ public class EnemiesMovingBehavior : MonoBehaviour
         enemiesMoveDirection = Vector3.right;
     }
 
-    public void resetAll()
+    public void onGameStarted()
     {
         initialize();
     }

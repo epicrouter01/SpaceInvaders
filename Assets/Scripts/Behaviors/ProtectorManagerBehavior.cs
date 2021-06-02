@@ -9,10 +9,10 @@ public class ProtectorManagerBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setUp();
+        onGameStarted();
     }
 
-    public void setUp()
+    public void onGameStarted()
     {
         setLifes();
         updateProtectors();

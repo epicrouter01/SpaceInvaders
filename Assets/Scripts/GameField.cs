@@ -7,6 +7,7 @@ public class GameField : MonoBehaviour
     [SerializeField] private GameObject enemiesContainer = null;
     [SerializeField] private GameObject playerLifesContainer = null;
     [SerializeField] private GameObject protectorsContainer = null;
+    [SerializeField] private GameObject scoreContainer = null;
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +44,10 @@ public class GameField : MonoBehaviour
     {
         player.transform.position = new Vector3(0, player.transform.position.y, 0);
         getEnemiesSpawnBehavior().spawnEnemies();
-        getEnemiesMovingBehavior().resetAll();
-        getPlayerLifesBehavior().cleanUp();
-        getProtectorsManager().setUp();
+        getEnemiesMovingBehavior().onGameStarted();
+        getPlayerLifesBehavior().onGameStarted();
+        getProtectorsManager().onGameStarted();
+        getScoreChangerBehavior().onGameStarted();
     }
 
     // Update is called once per frame
@@ -80,8 +82,9 @@ public class GameField : MonoBehaviour
 
     private void destroyEnemy(GameObject enemy)
     {
-        getEnemiesDestroyerBehavior().destroyEnemy(enemy.GetComponent<EnemyBehavior>());
+        int count = getEnemiesDestroyerBehavior().destroyEnemy(enemy.GetComponent<EnemyBehavior>());
         getEnemiesMovingBehavior().onEnemyDestroyed();
+        getScoreChangerBehavior().onEnemiesDestroyed(count);
     }
 
     private InputShootingBehavior getPlayerShootingBehavior()
@@ -112,5 +115,9 @@ public class GameField : MonoBehaviour
     private ProtectorManagerBehavior getProtectorsManager()
     {
         return protectorsContainer.GetComponent<ProtectorManagerBehavior>();
+    }
+    private ScoreChangerBehavior getScoreChangerBehavior()
+    {
+        return scoreContainer.GetComponent<ScoreChangerBehavior>();
     }
 }

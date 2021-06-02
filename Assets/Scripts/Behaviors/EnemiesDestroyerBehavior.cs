@@ -14,7 +14,7 @@ public class EnemiesDestroyerBehavior : MonoBehaviour
             Destroy(getSpawner().Enemies[tile.X, tile.Y]);
         }
 
-        return 0;
+        return list.Count;
     }
 
     private BoardTile[,] createTiles()
