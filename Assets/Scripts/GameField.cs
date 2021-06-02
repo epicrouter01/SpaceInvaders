@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class GameField : MonoBehaviour
@@ -12,16 +10,11 @@ public class GameField : MonoBehaviour
     [SerializeField] private float enemiesInitialSpeed = 0;
     [SerializeField] private float enemiesMaxSpeed = 0;
     [SerializeField] private float enemiesVerticalMove = 0;
-    [SerializeField] private MainCharacter player = null;
-    [SerializeField] private GameObject playerBulletPrefab = null;
+    [SerializeField] private GameObject player = null;
     [SerializeField] private GameObject enemyPrefab = null;
     private readonly float enemiesInitialMoveDelay = 0.2f;
     private readonly float loseThreshold = 2;
-    private readonly float playerSpeed = 12;
-    private readonly float bulletSpeed = 30;
 
-    private HorizontalMovementBehavior playerMovementBehavior;
-    private Bullet playerBullet;
     private GameObject[,] enemies;
     private Vector3 enemiesMoveDirection;
     private float enemiesSpeed;
@@ -33,13 +26,13 @@ public class GameField : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setBehaviors();
+        initializeBehaviors();
         initialize();
     }
 
-    private void setBehaviors()
+    private void initializeBehaviors()
     {
-        playerMovementBehavior = new HorizontalMovementBehavior(player.gameObject, gameWidth, playerSpeed);
+        getPlayerShootingBehavior().registerCollisionCallback(onPlayerBulletCollision);
     }
 
     private void initialize()
@@ -57,9 +50,6 @@ public class GameField : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        movePlayer();
-        handleShootInput();
-        movePlayerBullet();
         moveEnemies();
 
         if (Input.GetKey(KeyCode.UpArrow))
@@ -131,7 +121,7 @@ public class GameField : MonoBehaviour
     private void cleanUp()
     {
         removeEnemies();
-        destroyBullet();
+        getPlayerShootingBehavior().destroyBullet();
     }
 
     private void removeEnemies()
@@ -271,52 +261,11 @@ public class GameField : MonoBehaviour
         }
     }
 
-    private void movePlayer()
-    {
-        playerMovementBehavior.update(Time.deltaTime);
-    }
-
-    private void movePlayerBullet()
-    {
-        if (playerBullet == null) return;
-
-        playerBullet.transform.position += Vector3.up * bulletSpeed * Time.deltaTime;
-        if (playerBullet.transform.position.y >= gameHeight)
-        {
-            destroyBullet();
-        }
-    }
-
-    private void destroyBullet()
-    {
-        if (playerBullet == null) return;
-        Destroy(playerBullet.gameObject);
-        playerBullet = null;
-    }
-
-    private void handleShootInput()
-    {
-        if (playerBullet != null) return;
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            makeShot();
-        }
-    }
-
-    private void makeShot()
-    {
-        playerBullet = Instantiate(playerBulletPrefab).GetComponent<Bullet>();
-        playerBullet.name = "PlayerBullet";
-        playerBullet.transform.position = player.transform.position;
-        playerBullet.registerCollisionCallback(onPlayerBulletCollision);
-    }
-
     private void onPlayerBulletCollision(GameObject gameObject)
     {
         if (gameObject.tag == "Enemy")
         {
-            destroyBullet();
+            getPlayerShootingBehavior().destroyBullet();
             destroyEnemy(gameObject);
         }
     }
@@ -345,5 +294,10 @@ public class GameField : MonoBehaviour
             }
 
         return result;
+    }
+
+    private InputShootingBehavior getPlayerShootingBehavior()
+    {
+        return player.GetComponent<InputShootingBehavior>();
     }
 }

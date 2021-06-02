@@ -1,30 +1,21 @@
 ﻿using UnityEngine;
 
-public class HorizontalMovementBehavior: BaseBehavior
+public class HorizontalMovementBehavior: MonoBehaviour
 {
-    private float speed;
-    private float screenWidth;
-    private GameObject target;
+    [SerializeField] private float speed = 0;
+    [SerializeField] private float screenWidth = 0;
 
-    public HorizontalMovementBehavior(GameObject target, float screenWidth, float speed)
+    void Update()
     {
-        this.target = target;
-        this.screenWidth = screenWidth;
-        this.speed = speed;
-    }
-
-    public override void update(float deltaTime)
-    {
-        base.update(deltaTime);
         moveObject();
     }
 
     private void moveObject()
     {
-        Vector3 newPosition = Vector3.right * GetMovingInput() * speed * deltaTime;
-        newPosition += target.transform.position;
+        Vector3 newPosition = Vector3.right * GetMovingInput() * speed * Time.deltaTime;
+        newPosition += transform.position;
         newPosition.x = Mathf.Clamp(newPosition.x, -screenWidth, screenWidth);
-        target.transform.position = newPosition;
+        transform.position = newPosition;
     }
 
     private float GetMovingInput()

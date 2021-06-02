@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System;
 
-public class Bullet : MonoBehaviour
+public class CollisionDetectionBehavior : MonoBehaviour
 {
-    Action<GameObject> onCollisionCallback;
+    private Action<GameObject> onCollisionCallback;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
