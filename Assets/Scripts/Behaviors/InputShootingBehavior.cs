@@ -5,7 +5,6 @@ public class InputShootingBehavior : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab = null;
     [SerializeField] private float bulletSpeed = 0;
-    [SerializeField] private float screenHeight = 0;
 
     private Action<GameObject> onCollisionCallback;
     private GameObject bullet;
@@ -39,7 +38,7 @@ public class InputShootingBehavior : MonoBehaviour
         if (bullet == null) return;
 
         bullet.transform.position += Vector3.up * bulletSpeed * Time.deltaTime;
-        if (bullet.transform.position.y >= screenHeight)
+        if (bullet.transform.position.y >= getGameWorld().GameHeight)
         {
             destroyBullet();
         }
@@ -63,4 +62,8 @@ public class InputShootingBehavior : MonoBehaviour
             onCollisionCallback(gameObject);
     }
 
+    private GameWorldBehavior getGameWorld()
+    {
+        return gameObject.GetComponent<GameWorldBehavior>();
+    }
 }

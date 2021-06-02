@@ -3,7 +3,6 @@
 public class HorizontalMovementBehavior: MonoBehaviour
 {
     [SerializeField] private float speed = 0;
-    [SerializeField] private float screenWidth = 0;
 
     void Update()
     {
@@ -14,7 +13,7 @@ public class HorizontalMovementBehavior: MonoBehaviour
     {
         Vector3 newPosition = Vector3.right * GetMovingInput() * speed * Time.deltaTime;
         newPosition += transform.position;
-        newPosition.x = Mathf.Clamp(newPosition.x, -screenWidth, screenWidth);
+        newPosition.x = Mathf.Clamp(newPosition.x, -getGameWorld().GameWidth, getGameWorld().GameWidth);
         transform.position = newPosition;
     }
 
@@ -26,5 +25,10 @@ public class HorizontalMovementBehavior: MonoBehaviour
             return 1;
 
         return 0;
+    }
+
+    private GameWorldBehavior getGameWorld()
+    {
+        return gameObject.GetComponent<GameWorldBehavior>();
     }
 }

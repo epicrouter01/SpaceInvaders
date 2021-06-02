@@ -1,0 +1,52 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemiesSpawnBehavior : MonoBehaviour
+{
+    [SerializeField] private GameObject enemyPrefab = null;
+    [SerializeField] private int enemiesRows = 0;
+    [SerializeField] private int enemiesCols = 0;
+
+    private GameObject[,] enemies;
+
+    public GameObject[,] Enemies { get => enemies; }
+    public int EnemiesRows { get => enemiesRows; }
+    public int EnemiesCols { get => enemiesCols; }
+
+    public void spawnEnemies()
+    {
+        GameObject enemy;
+        Vector3 position;
+
+        enemies = new GameObject[enemiesRows, enemiesCols];
+        for (int i = 0; i < enemiesRows; i++)
+        {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                enemy = Instantiate(enemyPrefab);
+                position = new Vector3(-getGameWorld().GameWidth + j * 2.27f, getGameWorld().GameHeight - 1 - i * 2.3f, 0);
+                enemy.transform.position = position;
+                Enemies[i, j] = enemy;
+            }
+        }
+    }
+
+    public void removeEnemies()
+    {
+        for (int i = 0; i < enemiesRows; i++)
+        {
+            for (int j = 0; j < enemiesCols; j++)
+            {
+                if (enemies[i, j] == null) continue;
+
+                Destroy(enemies[i, j]);
+            }
+        }
+    }
+
+    private GameWorldBehavior getGameWorld()
+    {
+        return gameObject.GetComponent<GameWorldBehavior>();
+    }
+}
