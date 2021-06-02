@@ -6,7 +6,7 @@ public class InputShootingBehavior : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab = null;
     [SerializeField] private float bulletSpeed = 0;
 
-    private Action<GameObject> onCollisionCallback;
+    private Action<GameObject, GameObject> onCollisionCallback;
     private GameObject bullet;
 
     void Update()
@@ -44,7 +44,7 @@ public class InputShootingBehavior : MonoBehaviour
         }
     }
 
-    public void registerCollisionCallback(Action<GameObject> cb)
+    public void registerCollisionCallback(Action<GameObject, GameObject> cb)
     {
         onCollisionCallback = cb;
     }
@@ -59,7 +59,7 @@ public class InputShootingBehavior : MonoBehaviour
     private void onPlayerBulletCollision(GameObject target, GameObject bullet)
     {
         if (onCollisionCallback != null)
-            onCollisionCallback(gameObject);
+            onCollisionCallback(target, bullet);
     }
 
     private GameWorldBehavior getGameWorld()

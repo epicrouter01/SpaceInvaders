@@ -5,6 +5,7 @@ public class GameField : MonoBehaviour
 {
     [SerializeField] private GameObject player = null;
     [SerializeField] private GameObject enemiesContainer = null;
+    [SerializeField] private GameObject playerLifesContainer = null;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,7 @@ public class GameField : MonoBehaviour
     private void initializeBehaviors()
     {
         getPlayerShootingBehavior().registerCollisionCallback(onPlayerBulletCollision);
-        getEnemiesMovingBehavior().registerGameOverCallback(onGameOver);
+        getEnemiesMovingBehavior().registerGameOverCallback(gameOver);
         getEnemiesShootingBehavior().registerCollisionCallback(onEnemyBulletCollision);
     }
 
@@ -25,6 +26,9 @@ public class GameField : MonoBehaviour
         if (target.tag == "Player")
         {
             getEnemiesShootingBehavior().destroyBullet(bullet);
+            getPlayerLifesBehavior().LifesCount -= 1;
+            if (getPlayerLifesBehavior().LifesCount <= 0)
+                gameOver();
         }
     }
 
@@ -33,6 +37,7 @@ public class GameField : MonoBehaviour
         player.transform.position = new Vector3(0, player.transform.position.y, 0);
         getEnemiesSpawnBehavior().spawnEnemies();
         getEnemiesMovingBehavior().resetAll();
+        getPlayerLifesBehavior().cleanUp();
     }
 
     // Update is called once per frame
@@ -40,7 +45,7 @@ public class GameField : MonoBehaviour
     {
     }
 
-    private void onGameOver()
+    private void gameOver()
     {
         cleanUp();
         initialize();
@@ -52,12 +57,12 @@ public class GameField : MonoBehaviour
         getPlayerShootingBehavior().destroyBullet();
     }
 
-    private void onPlayerBulletCollision(GameObject gameObject)
+    private void onPlayerBulletCollision(GameObject target, GameObject bullet)
     {
-        if (gameObject.tag == "Enemy")
+        if (target.tag == "Enemy")
         {
             getPlayerShootingBehavior().destroyBullet();
-            destroyEnemy(gameObject);
+            destroyEnemy(target);
         }
     }
 
@@ -87,5 +92,9 @@ public class GameField : MonoBehaviour
     private EnemiesShootingBehavior getEnemiesShootingBehavior()
     {
         return enemiesContainer.GetComponent<EnemiesShootingBehavior>();
+    }
+    private LifesBehavior getPlayerLifesBehavior()
+    {
+        return playerLifesContainer.GetComponent<LifesBehavior>();
     }
 }
