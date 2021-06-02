@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class LoadingSceneManager : MonoBehaviour
 {
@@ -29,13 +30,12 @@ public class LoadingSceneManager : MonoBehaviour
     private void registerModels()
     {
         ModelsManager.getInstance().ScoreModel = new ScoreModel();
+        ModelsManager.getInstance().LoaderModel = new FileLoaderModel();
     }
 
     private void loadPersistentData()
     {
-        var file = Resources.Load<TextAsset>("Text/data");
-        if (file != null)
-            data = JsonUtility.FromJson<PersistentData>(file.ToString());
+        data = ModelsManager.getInstance().LoaderModel.getPersistentData();
     }
 
     private void setData()

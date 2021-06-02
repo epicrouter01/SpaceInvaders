@@ -9,6 +9,8 @@ public class GameField : MonoBehaviour
     [SerializeField] private GameObject protectorsContainer = null;
     [SerializeField] private GameObject scoreContainer = null;
 
+    private Action<int> onGameOverCallback;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,15 +52,22 @@ public class GameField : MonoBehaviour
         getScoreChangerBehavior().onGameStarted();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void registerGameOverCallback(Action<int> callback)
     {
+        onGameOverCallback = callback;
     }
 
     private void gameOver()
     {
+        makeGameoverCallback();
         cleanUp();
         initialize();
+    }
+
+    private void makeGameoverCallback()
+    {
+        if (onGameOverCallback != null)
+            onGameOverCallback(getScoreChangerBehavior().Score);
     }
 
     private void cleanUp()
