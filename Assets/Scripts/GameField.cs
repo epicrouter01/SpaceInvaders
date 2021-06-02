@@ -80,17 +80,13 @@ public class GameField : MonoBehaviour
 
     private void destroyEnemy(GameObject enemy)
     {
-        Destroy(enemy);
+        getEnemiesDestroyerBehavior().destroyEnemy(enemy.GetComponent<EnemyBehavior>());
         getEnemiesMovingBehavior().onEnemyDestroyed();
     }
 
     private InputShootingBehavior getPlayerShootingBehavior()
     {
         return player.GetComponent<InputShootingBehavior>();
-    }
-    private HorizontalMovementBehavior getPlayerMovementBehavior()
-    {
-        return player.GetComponent<HorizontalMovementBehavior>();
     }
 
     private EnemiesSpawnBehavior getEnemiesSpawnBehavior()
@@ -104,6 +100,10 @@ public class GameField : MonoBehaviour
     private EnemiesShootingBehavior getEnemiesShootingBehavior()
     {
         return enemiesContainer.GetComponent<EnemiesShootingBehavior>();
+    }
+    private EnemiesDestroyerBehavior getEnemiesDestroyerBehavior()
+    {
+        return enemiesContainer.GetComponent<EnemiesDestroyerBehavior>();
     }
     private LifesBehavior getPlayerLifesBehavior()
     {

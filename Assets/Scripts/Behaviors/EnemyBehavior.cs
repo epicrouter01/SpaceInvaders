@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
     [SerializeField] private Sprite[] sprites = null;
+
+    private int row;
+    private int col;
     public enum Colors {
         Blue = 0,
         Red = 1,
@@ -21,6 +24,9 @@ public class EnemyBehavior : MonoBehaviour
             updateSprite();
         } 
     }
+
+    public int Row { get => row; set => row = value; }
+    public int Col { get => col; set => col = value; }
 
     // Start is called before the first frame update
     void Start()

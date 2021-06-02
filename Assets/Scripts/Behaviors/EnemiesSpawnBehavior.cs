@@ -27,6 +27,9 @@ public class EnemiesSpawnBehavior : MonoBehaviour
             {
                 enemy = Instantiate(enemyPrefab);
                 enemy.GetComponent<EnemyBehavior>().Color = generateEnemyColor();
+                enemy.GetComponent<EnemyBehavior>().Row = i;
+                enemy.GetComponent<EnemyBehavior>().Col = j;
+
                 position = new Vector3(-getGameWorld().GameWidth + j * 2.27f, getGameWorld().GameHeight - 1 - i * 2.3f, 0);
                 enemy.transform.position = position;
                 Enemies[i, j] = enemy;
@@ -37,7 +40,6 @@ public class EnemiesSpawnBehavior : MonoBehaviour
     public EnemyBehavior.Colors generateEnemyColor()
     {
         Array colors = Enum.GetValues(typeof(EnemyBehavior.Colors));
-        Debug.Log(colors);
         return (EnemyBehavior.Colors)colors.GetValue(UnityEngine.Random.Range(0, colors.Length));
     }
 

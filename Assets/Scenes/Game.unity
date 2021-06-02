@@ -737,6 +737,7 @@ GameObject:
   - component: {fileID: 1176737291}
   - component: {fileID: 1176737290}
   - component: {fileID: 1176737293}
+  - component: {fileID: 1176737294}
   m_Layer: 0
   m_Name: EnemiesContainer
   m_TagString: Untagged
@@ -818,6 +819,18 @@ MonoBehaviour:
   bulletPrefab: {fileID: 6725860412573585806, guid: 56884fe464e5b994099da029f23700a4,
     type: 3}
   bulletsSpeed: 20
+--- !u!114 &1176737294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176737288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4912835a27a72f4bac575c96a59fb92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1309329777
 GameObject:
   m_ObjectHideFlags: 0
