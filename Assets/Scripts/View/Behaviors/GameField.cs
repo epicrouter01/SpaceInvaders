@@ -99,7 +99,7 @@ public class GameField : MonoBehaviour
             getPlayerShootingBehavior().destroyBullet();
             destroyEnemy(target);
         }
-        if (target.tag == "Protector")
+        else if (target.tag == "Protector")
         {
             getPlayerShootingBehavior().destroyBullet();
         }
@@ -110,6 +110,13 @@ public class GameField : MonoBehaviour
         int count = getEnemiesDestroyerBehavior().destroyEnemy(enemy.GetComponent<EnemyBehavior>());
         getEnemiesMovingBehavior().onEnemyDestroyed();
         getScoreChangerBehavior().onEnemiesDestroyed(count);
+        checkWinCondition();
+    }
+
+    private void checkWinCondition()
+    {
+        if (getEnemiesSpawnBehavior().isEmpty())
+            gameOver();
     }
 
     private InputShootingBehavior getPlayerShootingBehavior()

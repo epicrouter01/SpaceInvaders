@@ -56,6 +56,16 @@ public class EnemiesSpawnBehavior : MonoBehaviour
         }
     }
 
+    public bool isEmpty()
+    {
+        for (int i = 0; i < enemiesRows; i++)
+            for (int j = 0; j < EnemiesCols; j++)
+                if (enemies[i, j] != null)
+                    return false;
+
+        return true;
+    }
+
     private GameWorldBehavior getGameWorld()
     {
         return gameObject.GetComponent<GameWorldBehavior>();
