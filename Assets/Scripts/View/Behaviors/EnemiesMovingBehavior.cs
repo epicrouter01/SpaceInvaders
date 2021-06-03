@@ -10,6 +10,7 @@ public class EnemiesMovingBehavior : MonoBehaviour
     private readonly float enemiesInitialMoveDelay = 0.2f;
     private readonly float loseThreshold = 2;
 
+    private SpeedCalculationStrategy speedStrategy = new SpeedCalculationStrategy();
     private Action onGameOver;
     private Vector3 enemiesMoveDirection;
     private float enemiesSpeed;
@@ -215,8 +216,7 @@ public class EnemiesMovingBehavior : MonoBehaviour
 
     private void calculateEnemiesSpeed()
     {
-        float ratio = (float)getEnemiesCount() / (float)(getSpawner().EnemiesRows * getSpawner().EnemiesCols);
-        enemiesSpeed = enemiesMaxSpeed - (enemiesMaxSpeed - enemiesInitialSpeed) * ratio;
+        enemiesSpeed = speedStrategy.calculateSpeed(getEnemiesCount(), getSpawner().EnemiesRows * getSpawner().EnemiesCols, enemiesInitialSpeed, enemiesMaxSpeed);
     }
 
     private int getEnemiesCount()
