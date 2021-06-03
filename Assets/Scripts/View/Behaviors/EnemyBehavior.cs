@@ -16,6 +16,7 @@ public class EnemyBehavior : MonoBehaviour
     }
 
     private Colors color;
+    private bool flicked = false;
 
     public Colors Color { 
         get => color; 
@@ -36,12 +37,13 @@ public class EnemyBehavior : MonoBehaviour
 
     private void updateSprite()
     {
-        GetComponent<SpriteRenderer>().sprite = sprites[(int)color];
+        int frame = (int)color + (flicked ? 4 : 0);
+        GetComponent<SpriteRenderer>().sprite = sprites[frame];
     }
 
-    // Update is called once per frame
-    void Update()
+    public void flick()
     {
-        
+        flicked = !flicked;
+        updateSprite();
     }
 }

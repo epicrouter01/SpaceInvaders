@@ -98,6 +98,7 @@ public class EnemiesMovingBehavior : MonoBehaviour
         {
             if (getEnemies()[currentMovingRow, i] == null) continue;
             getEnemies()[currentMovingRow, i].transform.position += getEnemiesMoveVector();
+            getEnemies()[currentMovingRow, i].GetComponent<EnemyBehavior>().flick();
         }
 
         currentMovingRow -= 1;
