@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemiesDestroyerBehavior : MonoBehaviour
 {
+    [SerializeField] private GameObject explosionPrefab = null;
     private EnemiesDestroyStrategy enemiesDestroyStrategy = new EnemiesDestroyStrategy();
 
     public int destroyEnemy(EnemyBehavior enemy)
@@ -11,10 +12,18 @@ public class EnemiesDestroyerBehavior : MonoBehaviour
         List <BoardTile> list = enemiesDestroyStrategy.getDestroyedEnemies(createTiles(), enemy.Row, enemy.Col);
         foreach (BoardTile tile in list)
         {
+            setExplosion(getSpawner().Enemies[tile.X, tile.Y]);
             getSpawner().removeEnemy(tile.X, tile.Y);
         }
 
         return list.Count;
+    }
+
+    private void setExplosion(GameObject enemy)
+    {
+        GameObject explosion = Instantiate(explosionPrefab);
+        explosion.transform.position = enemy.transform.position;
+        explosion.GetComponent<ExplosionBehavior>().setColor(enemy.GetComponent<EnemyBehavior>().Color);
     }
 
     private BoardTile[,] createTiles()
