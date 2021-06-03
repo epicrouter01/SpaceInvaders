@@ -18,17 +18,7 @@ public class LifesBehavior : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        initialize();
-    }
-
-    private void initialize()
-    {
-        createLifes();
-        onGameStarted();
-    }
+    public int MaxLifes { get => maxLifes; set => maxLifes = value; }
 
     private void createLifes()
     {
@@ -51,11 +41,16 @@ public class LifesBehavior : MonoBehaviour
 
     public void onGameStarted()
     {
+        removeLifes();
+        createLifes();
         LifesCount = maxLifes;
     }
 
-    private GameWorldBehavior getWorld()
+    private void removeLifes()
     {
-        return gameObject.GetComponent<GameWorldBehavior>();
+        foreach (GameObject life in lifes)
+            Destroy(life);
+
+        lifes.RemoveAll((GameObject o) => true);
     }
 }

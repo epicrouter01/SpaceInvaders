@@ -12,8 +12,8 @@ public class EnemiesSpawnBehavior : MonoBehaviour
     private GameObject[,] enemies;
 
     public GameObject[,] Enemies { get => enemies; }
-    public int EnemiesRows { get => enemiesRows; }
-    public int EnemiesCols { get => enemiesCols; }
+    public int EnemiesRows { get => enemiesRows; set => enemiesRows = value; }
+    public int EnemiesCols { get => enemiesCols; set => enemiesCols = value; }
 
     public void spawnEnemies()
     {

@@ -15,6 +15,8 @@ public class EnemiesShootingBehavior : MonoBehaviour
     private float shootingInterval = 0;
     private List<GameObject> bullets = new List<GameObject>();
 
+    public float BulletsSpeed { get => bulletsSpeed; set => bulletsSpeed = value; }
+
     // Start is called before the first frame update
     void Start()
     {

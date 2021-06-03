@@ -6,11 +6,8 @@ public class ProtectorManagerBehavior : MonoBehaviour
 {
     [SerializeField] private int protectorLife = 0;
     [SerializeField] private ProtectorBehavior[] protectors = new ProtectorBehavior[4];
-    // Start is called before the first frame update
-    void Start()
-    {
-        onGameStarted();
-    }
+
+    public int ProtectorLife { get => protectorLife; set => protectorLife = value; }
 
     public void onGameStarted()
     {

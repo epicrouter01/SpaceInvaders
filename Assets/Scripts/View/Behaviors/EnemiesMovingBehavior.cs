@@ -16,11 +16,9 @@ public class EnemiesMovingBehavior : MonoBehaviour
     private float enemiesMoveDelay;
     private int currentMovingRow;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        initialize();
-    }
+    public float EnemiesInitialSpeed { get => enemiesInitialSpeed; set => enemiesInitialSpeed = value; }
+    public float EnemiesMaxSpeed { get => enemiesMaxSpeed; set => enemiesMaxSpeed = value; }
+    public float EnemiesVerticalMove { get => enemiesVerticalMove; set => enemiesVerticalMove = value; }
 
     private void initialize()
     {

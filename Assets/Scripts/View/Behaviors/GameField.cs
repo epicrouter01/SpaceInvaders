@@ -15,13 +15,21 @@ public class GameField : MonoBehaviour
     void Start()
     {
         initializeBehaviors();
-        restartGame();
     }
 
-    public void restartGame()
+    public void setData(ConfigData data)
     {
-        resumeGame();
-        startGame();
+        if (data == null) return;
+        getPlayerShootingBehavior().BulletSpeed = data.playerBulletSpeed;
+        getPlayerLifesBehavior().MaxLifes = data.playerLifes;
+        player.GetComponent<HorizontalMovementBehavior>().Speed = data.playerSpeed;
+        getEnemiesMovingBehavior().EnemiesInitialSpeed = data.enemiesInitialSpeed;
+        getEnemiesMovingBehavior().EnemiesMaxSpeed = data.enemiesMaxSpeed;
+        getEnemiesMovingBehavior().EnemiesVerticalMove = data.enemiesVerticalMoveValue;
+        getEnemiesShootingBehavior().BulletsSpeed = data.enemiesBulletsSpeed;
+        getProtectorsManager().ProtectorLife = data.protectorLifes;
+        getEnemiesSpawnBehavior().EnemiesCols = data.enemiesCols;
+        getEnemiesSpawnBehavior().EnemiesRows = data.enemiesRows;
     }
 
     private void initializeBehaviors()
@@ -48,7 +56,7 @@ public class GameField : MonoBehaviour
         }
     }
 
-    private void startGame()
+    public void startGame()
     {
         player.transform.position = new Vector3(0, player.transform.position.y, 0);
         getEnemiesSpawnBehavior().spawnEnemies();
@@ -56,6 +64,7 @@ public class GameField : MonoBehaviour
         getPlayerLifesBehavior().onGameStarted();
         getProtectorsManager().onGameStarted();
         getScoreChangerBehavior().onGameStarted();
+        resumeGame();
     }
 
     public void registerGameOverCallback(Action<int> callback)

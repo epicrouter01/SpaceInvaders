@@ -9,6 +9,8 @@ public class InputShootingBehavior : MonoBehaviour
     private Action<GameObject, GameObject> onCollisionCallback;
     private GameObject bullet;
 
+    public float BulletSpeed { get => bulletSpeed; set => bulletSpeed = value; }
+
     void Update()
     { 
         handleShootInput();

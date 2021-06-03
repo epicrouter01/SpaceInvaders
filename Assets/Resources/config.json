@@ -1,0 +1,12 @@
+{
+	"playerSpeed": "12",
+	"playerBulletSpeed": "30",
+	"playerLifes": "3",
+	"enemiesVerticalMoveValue": "0.6",
+	"enemiesInitialSpeed": "2",
+	"enemiesMaxSpeed": "13",
+	"enemiesBulletsSpeed": "20",
+	"enemiesRows": 6,
+	"enemiesCols": 17,
+	"protectorLifes": "5"
+}

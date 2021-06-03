@@ -13,7 +13,16 @@ public class GameSceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        setConfigData();
         gameField.registerGameOverCallback(onGameOver);
+        gameField.startGame();
+    }
+
+    private void setConfigData()
+    {
+        ConfigData data = ModelsManager.getInstance().ConfigModel.Data;
+        if (data == null) return;
+        gameField.setData(data);
     }
 
     void Update()
@@ -58,7 +67,7 @@ public class GameSceneManager : MonoBehaviour
         if (isPaused)
             gameField.resumeGame();
         else
-            gameField.restartGame();
+            gameField.startGame();
 
         isPaused = false;
     }

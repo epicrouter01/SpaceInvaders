@@ -4,6 +4,8 @@ public class HorizontalMovementBehavior: MonoBehaviour
 {
     [SerializeField] private float speed = 0;
 
+    public float Speed { get => speed; set => speed = value; }
+
     void Update()
     {
         moveObject();

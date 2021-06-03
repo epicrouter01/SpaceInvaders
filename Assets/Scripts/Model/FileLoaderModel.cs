@@ -28,4 +28,13 @@ public class FileLoaderModel: Model
         }
         return data == null ? null : JsonUtility.FromJson<PersistentData>(data);
     }
+
+    public ConfigData loadConfig()
+    {
+        var file = Resources.Load<TextAsset>("config");
+        if (file != null)
+            return JsonUtility.FromJson<ConfigData>(file.ToString());
+
+        return null;
+    }
 }

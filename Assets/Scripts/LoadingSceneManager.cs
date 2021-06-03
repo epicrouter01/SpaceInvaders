@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
-{
-    private PersistentData data;
-    
+{    
     void Start()
     {
         registerModels();
         loadPersistentData();
-        setData();
+        loadConfig();
         StartCoroutine(loadMenuWithDelay());
     }
 
@@ -30,17 +28,20 @@ public class LoadingSceneManager : MonoBehaviour
     {
         ModelsManager.getInstance().ScoreModel = new ScoreModel();
         ModelsManager.getInstance().LoaderModel = new FileLoaderModel();
+        ModelsManager.getInstance().ConfigModel = new ConfigModel();
     }
 
     private void loadPersistentData()
     {
+        PersistentData data;
         data = ModelsManager.getInstance().LoaderModel.getPersistentData();
-    }
-
-    private void setData()
-    {
         if (data == null) return;
-
         ModelsManager.getInstance().ScoreModel.Highscore = data.highscore;
+    }
+    
+    private void loadConfig()
+    {
+        ConfigData data = ModelsManager.getInstance().LoaderModel.loadConfig();
+        ModelsManager.getInstance().ConfigModel.Data = data;
     }
 }
